@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const adoptionsController = require('../controllers/adoptionsController');
 const adoptionValidator = require('../validation/adoptionValidator');
+const jwtValidator = require('../validations/jwtValidator');
 router.get('/adoption',adoptionValidator.id ,adoptionsController.getAdoption);
 router.get('/adoptions', adoptionsController.getAdoptions);
 router.post('/adoption',adoptionValidator.add , adoptionsController.postAdoption);
