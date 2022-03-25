@@ -1,41 +1,47 @@
 const {check, validationResult} = require('express-validator');
 
-const generateAdoptionsValidator =() =>[
-    check('id').notEmpty().isLength({max:11}).isNumeric().withMessage("Invalid name hijo de tu madre"),
-    check('user_id').notEmpty().isLength({max:11}).isNumeric().withMessage("Invalid user_id"),
-    check('pet_id').notEmpty().isLength({min:10, max:10}).isNumeric().withMessage("Invalid pet_id"),
-    check('date').notEmpty().isLength({max:150}).isDate().withMessage("Invalid date"),
+ const generateAdoptionValidators = () => [
+    check('user_id').notEmpty().isLength({min:10, max:10}).isNumeric().withMessage("Invalid user ID"),
+    check('pet_id').notEmpty().isLength({min:10, max:10}).isNumeric().withMessage("Invalid pet ID"),
+    check('date').notEmpty().isDate().withMessage("Invalid date"),
 ]
 
-const updateAdoptionslidators = () => [
-      check('id').notEmpty().isLength({max:11}).isNumeric().withMessage("Invalid name hijo de tu madre"),
-    check('user_id').notEmpty().isLength({max:11}).isNumeric().withMessage("Invalid user_id"),
-    check('pet_id').notEmpty().isLength({min:10, max:10}).isNumeric().withMessage("Invalid pet_id"),
-    check('date').notEmpty().isLength({max:150}).withMessage("Invalid addres"),
+const generateIdValidators = () => [
+    check('id').notEmpty().isNumeric().withMessage("Invalida Id")
 ]
 
-const reporter =(req, res, next) =>{
+const updateAdoptionValidators = () => [
+    check('id').notEmpty().isNumeric().withMessage("Invalida Id"),
+    check('user_id').isLength({min:10, max:10}).isNumeric().withMessage("Invalid user ID"),
+    check('pet_id').isLength({min:10, max:10}).isNumeric().withMessage("Invalid pet ID"),
+    check('date').isDate().withMessage("Invalid date"),
+]
+
+const reporter =(req, res, next) => {
     const errors = validationResult(req);
-    if(!errors.isEmpty()){
+
+    if (!errors.isEmpty()){
         return res.status(404).json({
-            "success" :false,
-            "code":404,
-            "message":errors,
-            "data": []
+            "success": false,
+            "code": 404,
+            "message": errors,
+            "data":[]
         });
-    }    
+    }
     next();
 }
 
 module.exports = {
     add: [
-        generateAdoptionsValidator(),
+        generateAdoptionValidators(),
         reporter
     ],
-    
-    update:
-    [
-        updateAdoptionslidators(),
+    id: [
+        generateIdValidators(),
+        reporter
+    ],
+    update:[
+        updateAdoptionValidators(),
         reporter
     ]
 };
